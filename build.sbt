@@ -9,7 +9,6 @@ lazy val `akka-management` = project
 
 lazy val `cluster-http` = project
   .in(file("cluster-http"))
-  .enablePlugins(AutomateHeaderPlugin)
   .settings(
     name := "akka-management-cluster-http",
     Dependencies.ClusterHttp
@@ -17,7 +16,7 @@ lazy val `cluster-http` = project
 
 lazy val `cluster-http-tests` = project
   .in(file("cluster-http-tests"))
-  .enablePlugins(AutomateHeaderPlugin, NoPublish)
+  .enablePlugins(NoPublish)
   .settings(
     name := "akka-management-cluster-http-tests",
     Dependencies.ClusterHttpTests

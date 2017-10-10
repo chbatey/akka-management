@@ -1,4 +1,3 @@
-addSbtPlugin("de.heikoseeberger"                 % "sbt-header"       % "1.6.0")
 addSbtPlugin("com.geirsson"                      % "sbt-scalafmt"     % "0.4.10")
 addSbtPlugin("com.dwijnand"                      % "sbt-dynver"       % "1.1.1")
 addSbtPlugin("com.dwijnand"                      % "sbt-travisci"     % "1.0.0-M4")

@@ -1,20 +1,12 @@
 import sbt._, Keys._
 
-import de.heikoseeberger.sbtheader._
-import de.heikoseeberger.sbtheader.HeaderKey._
 import org.scalafmt.sbt.ScalaFmtPlugin
 import org.scalafmt.sbt.ScalaFmtPlugin.autoImport._
 
 object Common extends AutoPlugin {
 
-  val FileHeader = (HeaderPattern.cStyleBlockComment,
-    """|/*
-       | * Copyright (C) 2016 Lightbend Inc. <http://www.lightbend.com>
-       | */
-       |""".stripMargin)
-
   override def trigger = allRequirements
-  override def requires = plugins.JvmPlugin && HeaderPlugin
+  override def requires = plugins.JvmPlugin
 
   override lazy val projectSettings = reformatOnCompileSettings ++
     Dependencies.Common ++ Seq(
@@ -53,12 +45,6 @@ object Common extends AutoPlugin {
     // -v Log "test run started" / "test started" / "test run finished" events on log level "info" instead of "debug".
     // -a Show stack traces and exception class name for AssertionErrors.
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-v", "-a"),
-
-    headers := headers.value ++ Map(
-      "scala" -> FileHeader,
-      "java" -> FileHeader
-    ),
-
     formatSbtFiles := false,
     scalafmtConfig := Some(baseDirectory.in(ThisBuild).value / ".scalafmt.conf"),
     ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = sbtPlugin.value)) // TODO Remove once this workaround no longer needed (https://github.com/sbt/sbt/issues/2786)!
