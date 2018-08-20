@@ -8,8 +8,7 @@ The bootstrap processes may be configured to use various implementations of how 
 implementation utilises DNS records and this works particularity well in environments like Kubernetes or Mesos
 where DNS records are managed for Services automatically.
 
-Please note that unlike many solutions that have been proposed by the wider community, this solution does NOT require
-any additional system like etcd/zookeeper/consul to be run along side the Akka cluster in order to discover the seed-nodes.
+Akka Cluster Bootstrap NOT require any additional system like etcd/zookeeper/consul to be run along side the Akka cluster in order to discover the seed-nodes.
 
 ## Dependencies
 
@@ -59,7 +58,7 @@ You also have to explicitly configure it to be used as the implementation in you
 akka.discovery.method = akka-dns 
 ```
 
-Be sure to read about the @ref[alternative discovery methods](discovery.md) that Akka provides, and you
+Be sure to read about the @ref[alternative discovery methods](discovery/index.md) that Akka provides, and you
 can pick the one most fitting to your cluster manager or runtime -- such as Kubernetes, Mesos or other cloud or tool specific methods.
 
 ## Akka Cluster Bootstrap Process explained

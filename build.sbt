@@ -26,7 +26,13 @@ lazy val `akka-management-root` = project
     docs
   )
   .settings(
-    parallelExecution in GlobalScope := false
+    parallelExecution in GlobalScope := false,
+    inThisBuild(List(
+      dependencyOverrides ++= Set(
+        "com.typesafe.akka" %% "akka-actor" % "2.5-SNAPSHOT",
+        "com.typesafe.akka" %% "akka-cluster" % "2.5-SNAPSHOT"
+      )
+    ))
   )
 
 // interfaces and extension for Discovery
@@ -48,7 +54,11 @@ lazy val `akka-discovery-dns` = project
   .settings(
     name := "akka-discovery-dns",
     organization := "com.lightbend.akka.discovery",
-    Dependencies.DiscoveryDns
+    Dependencies.DiscoveryDns,
+    dependencyOverrides ++= Set(
+      "com.typesafe.akka" %% "akka-actor" % "2.5-SNAPSHOT",
+      "com.typesafe.akka" %% "akka-cluster" % "2.5-SNAPSHOT"
+    )
   )
   .dependsOn(`akka-discovery`)
 
@@ -177,34 +187,34 @@ lazy val `bootstrap-joining-demo-kubernetes-api` = project
   .settings(
     name := "akka-management-bootstrap-joining-demo-kubernetes-api",
     skip in publish := true,
-    sources in (Compile, doc) := Seq.empty,
+    sources in(Compile, doc) := Seq.empty,
     whitesourceIgnore := true
   ).dependsOn(
-    `akka-management`,
-    `cluster-http`,
-    `akka-discovery-dns`,
-    `cluster-bootstrap`,
-    `akka-discovery-kubernetes-api`
-  )
+  `akka-management`,
+  `cluster-http`,
+  `akka-discovery-dns`,
+  `cluster-bootstrap`,
+  `akka-discovery-kubernetes-api`
+)
 
 lazy val `bootstrap-joining-demo-aws-api-ec2-tag-based` = project
-    .in(file("bootstrap-joining-demo/aws-api-ec2"))
-    .configs(IntegrationTest)
-    .enablePlugins(NoPublish)
-    .disablePlugins(BintrayPlugin)
-    .enablePlugins(AutomateHeaderPlugin)
-    .settings(
-      name := "akka-management-bootstrap-joining-demo-aws-api-ec2-tag-based",
-      skip in publish := true,
-      whitesourceIgnore := true,
-      sources in doc := Seq.empty,
-      Defaults.itSettings
-    ).dependsOn(
-      `akka-management`,
-      `cluster-http`,
-      `akka-discovery-aws-api`,
-      `cluster-bootstrap`
-  )
+  .in(file("bootstrap-joining-demo/aws-api-ec2"))
+  .configs(IntegrationTest)
+  .enablePlugins(NoPublish)
+  .disablePlugins(BintrayPlugin)
+  .enablePlugins(AutomateHeaderPlugin)
+  .settings(
+    name := "akka-management-bootstrap-joining-demo-aws-api-ec2-tag-based",
+    skip in publish := true,
+    whitesourceIgnore := true,
+    sources in doc := Seq.empty,
+    Defaults.itSettings
+  ).dependsOn(
+  `akka-management`,
+  `cluster-http`,
+  `akka-discovery-aws-api`,
+  `cluster-bootstrap`
+)
 
 lazy val `bootstrap-joining-demo-marathon-api-docker` = project
   .in(file("bootstrap-joining-demo/marathon-api-docker"))
@@ -214,15 +224,15 @@ lazy val `bootstrap-joining-demo-marathon-api-docker` = project
   .settings(
     name := "akka-management-bootstrap-joining-demo-marathon-api-docker",
     skip in publish := true,
-    sources in (Compile, doc) := Seq.empty,
+    sources in(Compile, doc) := Seq.empty,
     whitesourceIgnore := true
   ).dependsOn(
-    `akka-management`,
-    `cluster-http`,
-    `akka-discovery-dns`,
-    `cluster-bootstrap`,
-    `akka-discovery-marathon-api`
-  )
+  `akka-management`,
+  `cluster-http`,
+  `akka-discovery-dns`,
+  `cluster-bootstrap`,
+  `akka-discovery-marathon-api`
+)
 
 lazy val `bootstrap-joining-demo-aws-api-ecs` = project
   .in(file("bootstrap-joining-demo/aws-api-ecs"))
@@ -232,14 +242,14 @@ lazy val `bootstrap-joining-demo-aws-api-ecs` = project
   .settings(
     name := "akka-management-bootstrap-joining-demo-aws-api-ecs",
     skip in publish := true,
-    sources in (Compile, doc) := Seq.empty,
+    sources in(Compile, doc) := Seq.empty,
     whitesourceIgnore := true
   ).dependsOn(
-    `akka-management`,
-    `cluster-http`,
-    `cluster-bootstrap`,
-    `akka-discovery-aws-api-async`
-  )
+  `akka-management`,
+  `cluster-http`,
+  `cluster-bootstrap`,
+  `akka-discovery-aws-api-async`
+)
   .enablePlugins(JavaAppPackaging, AshScriptPlugin, DockerPlugin)
   .settings(
     dockerBaseImage := "openjdk:10-jre-slim",

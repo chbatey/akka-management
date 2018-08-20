@@ -3,7 +3,8 @@ import Keys._
 
 object Dependencies {
 
-  val AkkaVersion = "2.5.14"
+  // Needs 2.5.15
+  val AkkaVersion = "2.5-SNAPSHOT"
   val AkkaHttpVersion = "10.0.13" // TODO update to 10.1.x as soon as possible
 
   val JUnitVersion = "4.12"

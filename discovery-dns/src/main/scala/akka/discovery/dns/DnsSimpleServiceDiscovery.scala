@@ -3,6 +3,8 @@
  */
 package akka.discovery.dns
 
+import java.net.InetAddress
+
 import akka.AkkaVersion
 import akka.actor.ActorSystem
 import akka.event.Logging
@@ -43,8 +45,13 @@ class DnsSimpleServiceDiscovery(system: ActorSystem) extends SimpleServiceDiscov
         dns.ask(DnsProtocol.Resolve(srvRequest, Srv))(resolveTimeout).map {
           case resolved: DnsProtocol.Resolved =>
             log.debug("Resolved Dns.Resolved: {}", resolved)
-            val addresses = resolved.results.collect {
-              case srv: SRVRecord => ResolvedTarget(srv.target, Some(srv.port))
+            val ips: Map[String, InetAddress] = resolved.additionalRecords.collect {
+              case a: ARecord => a.name -> a.ip
+              case aaaa: AAAARecord => aaaa.name -> aaaa.ip
+            }.toMap
+
+            val addresses = resolved.records.collect {
+              case srv: SRVRecord => ResolvedTarget(srv.target, Some(srv.port), ips.get(srv.target))
             }
             Resolved(srvRequest, addresses)
           case resolved ⇒
@@ -56,7 +63,7 @@ class DnsSimpleServiceDiscovery(system: ActorSystem) extends SimpleServiceDiscov
         dns.ask(DnsProtocol.Resolve(lookup.serviceName, Ip()))(resolveTimeout).map {
           case resolved: DnsProtocol.Resolved =>
             log.debug("Resolved Dns.Resolved: {}", resolved)
-            val addresses = resolved.results.collect {
+            val addresses = resolved.records.collect {
               case a: ARecord => ResolvedTarget(cleanIpString(a.ip.getHostAddress), None)
               case a: AAAARecord => ResolvedTarget(cleanIpString(a.ip.getHostAddress), None)
             }
