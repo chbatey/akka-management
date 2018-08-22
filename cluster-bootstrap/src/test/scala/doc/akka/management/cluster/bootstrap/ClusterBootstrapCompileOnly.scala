@@ -4,18 +4,20 @@
 package doc.akka.management.cluster.bootstrap
 
 import akka.actor.ActorSystem
-import akka.annotation.InternalApi
-import akka.discovery.SimpleServiceDiscovery.Resolved
-import akka.event.Logging
+import akka.management.AkkaManagement
 import akka.management.cluster.bootstrap.ClusterBootstrap
-
-import scala.concurrent.Future
-import scala.concurrent.duration.FiniteDuration
 
 object ClusterBootstrapCompileOnly {
 
   val system = ActorSystem()
+
+  //#start
+  // Akka Management hosts the HTTP routes used by bootstrap
+  AkkaManagement(system).start()
+
+  // Starting the bootstrap process needs to be done explicitly
   ClusterBootstrap(system).start()
+  //#start
 
 }
 
