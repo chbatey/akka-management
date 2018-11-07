@@ -1,30 +1,10 @@
-/*
- * Copyright (C) 2017 Lightbend Inc. <http://www.lightbend.com>
- */
 package akka.cluster.bootstrap.config
 
-import akka.actor.ActorSystem
-import akka.cluster.Cluster
-import akka.management.AkkaManagement
-import akka.management.cluster.bootstrap.ClusterBootstrap
 import com.typesafe.config.ConfigFactory
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, WordSpec}
 
-
-//#main
-object Node1 extends App {
-  new Main(1)
-}
-
-object Node2 extends App {
-  new Main(2)
-}
-
-object Node3 extends App {
-  new Main(3)
-}
-
-class Main(nr: Int) {
-
+object ClusterFormationSpec {
+  SocketUtil
   val config = ConfigFactory.parseString(s"""
       akka.remote.artery.canonical.hostname = "127.0.0.$nr"
       akka.management.http.hostname = "127.0.0.$nr"
@@ -32,11 +12,20 @@ class Main(nr: Int) {
   val system = ActorSystem("local-cluster", config)
 
   AkkaManagement(system).start()
-
   ClusterBootstrap(system).start()
 
   Cluster(system).registerOnMemberUp({
     system.log.info("Cluster is up!")
   })
+
 }
-//#main
+
+class ClusterFormationSpec extends WordSpec with BeforeAndAfterAll {
+
+  "Cluster formation via config" should {
+    "work" in {
+
+    }
+  }
+
+}
